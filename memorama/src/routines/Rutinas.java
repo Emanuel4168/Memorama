@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.swing.ImageIcon;
 
+import components.JPairButton;
+
 public class Rutinas {
 	
 	
@@ -66,9 +68,10 @@ public class Rutinas {
 	   }
 	   
 	   public static ImageIcon changeSize(String imgName, int width, int height) {
-		   ImageIcon img = new ImageIcon();
+		   ImageIcon img = new ImageIcon(imgName);
 		   Image imagenConvertir = img.getImage();
 		   img.setImage(imagenConvertir.getScaledInstance(width, height, Image.SCALE_SMOOTH));
 		   return img;
 	   }
+	   
 }

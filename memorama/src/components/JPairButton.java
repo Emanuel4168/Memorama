@@ -2,20 +2,22 @@ package components;
 
 import javax.swing.*;
 
+import routines.Rutinas;
+
 public class JPairButton extends JButton{
-	private static final String BASE_URL = "images/";
+	public static final String BASE_URL = "/img/";
 	
 	private String backImage;
 	private String frontImage;
 	private JPairButton pair;
 	
-	public JPairButton(String backImage, String frontImage, JPairButton pair) {
+	public JPairButton(String frontImage, String backImage, JPairButton pair) {
 		this.backImage = backImage;
 		this.frontImage = frontImage;
 		this.pair = pair;
 	}
 	
-	public JPairButton(String backImage, String frontImage) {
+	public JPairButton(String frontImage, String backImage) {
 		this.backImage = backImage;
 		this.frontImage = frontImage;
 	}
@@ -43,7 +45,5 @@ public class JPairButton extends JButton{
 	public void setPair(JPairButton pair) {
 		this.pair = pair;
 	}
-	
-	
 
 }
