@@ -91,7 +91,9 @@ public class MainFrame extends JFrame implements ActionListener{
 			Thread.sleep(1000);
 			contClicks = 0;
 			if(currentPair.getPair() == btnOnClick) {
+				btnOnClick.setEnabled(false);
 				btnOnClick.setDisabledIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), 50, 50));
+				currentPair.setEnabled(false);
 				currentPair.setDisabledIcon(Rutinas.changeSize(currentPair.getFrontImage(), 50, 50));
 				return;
 			}
