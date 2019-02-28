@@ -15,19 +15,20 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JPairButton[] pairs; 
 	private JPairButton currentPair;
 	int contClicks;
+	private boolean canClick = true;
 	
 	private MainFrame() {
 		super("Memorama");
 		setLayout(new GridLayout(0,3,5,5));
 		createButtons();
-		addListeners();
 		
-		setSize(300,300);
+		setSize(400,400);
 		addButtons();
-		
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		updateFirst();
+		addListeners();
 		setResizable(false);
 	}
 	
@@ -60,8 +61,14 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	private void addButtons() {
 		for(int i = 0; i< pairs.length; i++) {
-			pairs[i].setIcon(Rutinas.changeSize(pairs[i].getBackImage(),50,50));
 			add(pairs[i]);
+		}
+	}
+	
+	private void updateFirst() {
+		for(int i = 0; i< pairs.length; i++) {
+			pairs[i].setIcon(Rutinas.changeSize(pairs[i].getBackImage(), pairs[i].getWidth(), pairs[i].getHeight()));
+			pairs[i].update(pairs[i].getGraphics());
 		}
 	}
 	
@@ -76,10 +83,12 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(!canClick)
+			return;
 		contClicks ++;
 		JPairButton btnOnClick = (JPairButton) e.getSource();
 		
-		btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), 50, 50));
+		btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
 		btnOnClick.update(btnOnClick.getGraphics());
 		
 		if(contClicks == 1) {
@@ -88,18 +97,20 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 
 		try{
+			canClick = false;
 			Thread.sleep(1000);
 			contClicks = 0;
 			if(currentPair.getPair() == btnOnClick) {
 				btnOnClick.setEnabled(false);
-				btnOnClick.setDisabledIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), 50, 50));
+				btnOnClick.setDisabledIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
 				currentPair.setEnabled(false);
-				currentPair.setDisabledIcon(Rutinas.changeSize(currentPair.getFrontImage(), 50, 50));
+				currentPair.setDisabledIcon(Rutinas.changeSize(currentPair.getFrontImage(), currentPair.getWidth(), currentPair.getHeight()));
+				canClick = true;
 				return;
 			}
-			btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), 50, 50));
-			currentPair.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), 50, 50));
-			
+			btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
+			currentPair.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), currentPair.getWidth(), currentPair.getHeight()));
+			canClick = true;
 		} catch (Exception ex){
 
 		}
