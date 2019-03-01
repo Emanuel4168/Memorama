@@ -11,18 +11,21 @@ import routines.Rutinas;
 public class MainFrame extends JFrame implements ActionListener{
 
 	private static final String [] IMAGE_NAMES = {"caballo.jpg","camaleon.jpg","delfin.jpg","elefante.jpg","gato.jpg","leon.jpg",
-													"murcielago.jpg","perro.jpg","pulpo.jpg","serpiente.jpg"};
+													"murcielago.jpg","perro.jpg","pulpo.jpg","serpiente.jpg","persona.jpg","buho.jpg"
+													,"dinosaurio.jpg","panda.jpg","tiburon.jpg"};
 	private JPairButton[] pairs; 
 	private JPairButton currentPair;
-	int contClicks;
+	int contClicks,totalPairs,contPairs = 0;
 	private boolean canClick = true;
 	
 	private MainFrame() {
 		super("Memorama");
+		totalPairs = Rutinas.nextInt(10,15);
+		System.out.println(totalPairs);
 		setLayout(new GridLayout(0,3,5,5));
 		createButtons();
 		
-		setSize(400,400);
+		setSize(500,600);
 		addButtons();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,15 +40,14 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	private void createButtons() {
-		pairs = new JPairButton[20]; 
+		pairs = new JPairButton[totalPairs*2]; 
 		JPairButton pair1,pair2;
 		int position1, position2;
 		
-		for(int i = 0; i < IMAGE_NAMES.length; i++ ) {
-			position1 = Rutinas.nextInt(0,19);
-			position2 = Rutinas.nextInt(0,19);
+		for(int i = 0; i < totalPairs; i++ ) {
+			position1 = Rutinas.nextInt(0,(totalPairs*2)-1);
+			position2 = Rutinas.nextInt(0,(totalPairs*2)-1);
 			if(pairs[position1] != null || pairs[position2] != null || position1 == position2) {
-				//System.out.println("repetido");
 				i--;
 				continue;
 			}
@@ -106,6 +108,11 @@ public class MainFrame extends JFrame implements ActionListener{
 				currentPair.setEnabled(false);
 				currentPair.setDisabledIcon(Rutinas.changeSize(currentPair.getFrontImage(), currentPair.getWidth(), currentPair.getHeight()));
 				canClick = true;
+				contPairs++;
+				
+				if(contPairs == totalPairs) 
+					JOptionPane.showMessageDialog(this, "Juego Terminado");
+					
 				return;
 			}
 			btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
