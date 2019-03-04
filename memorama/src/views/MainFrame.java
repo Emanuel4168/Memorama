@@ -16,16 +16,16 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JPairButton[] pairs; 
 	private JPairButton currentPair;
 	int contClicks,totalPairs,contPairs = 0;
-	private boolean canClick = true;
+	
 	
 	private MainFrame() {
 		super("Memorama");
 		totalPairs = Rutinas.nextInt(10,15);
 		System.out.println(totalPairs);
-		setLayout(new GridLayout(0,3,5,5));
+		setLayout(new GridLayout(0,4,5,5));
 		createButtons();
 		
-		setSize(500,600);
+		setSize(700,700);
 		addButtons();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,16 +62,30 @@ public class MainFrame extends JFrame implements ActionListener{
 	}
 	
 	private void addButtons() {
-		for(int i = 0; i< pairs.length; i++) {
-			add(pairs[i]);
-		}
+		for(int i = 0; i< pairs.length; i++)
+			add(pairs[i],i);
 	}
 	
 	private void updateFirst() {
-		for(int i = 0; i< pairs.length; i++) {
-			pairs[i].setIcon(Rutinas.changeSize(pairs[i].getBackImage(), pairs[i].getWidth(), pairs[i].getHeight()));
-			pairs[i].update(pairs[i].getGraphics());
+		for(JPairButton pair: pairs) {
+			pair.setIcon(Rutinas.changeSize(pair.getBackImage(), pair.getWidth(), pair.getHeight()));
+			pair.update(pair.getGraphics());
 		}
+	}
+	
+	public void Restart() {
+		removeButtons();
+		totalPairs = Rutinas.nextInt(10,15);
+		createButtons();
+		addButtons();
+		SwingUtilities.updateComponentTreeUI(this);
+		updateFirst();
+		addListeners();
+	}
+	
+	private void removeButtons() {
+		for(JPairButton pair: pairs) 
+			this.remove(pair);
 	}
 	
 	/*
@@ -85,11 +99,12 @@ public class MainFrame extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(!canClick)
-			return;
 		contClicks ++;
 		JPairButton btnOnClick = (JPairButton) e.getSource();
 		
+		if(currentPair == btnOnClick)
+			return;
+	
 		btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
 		btnOnClick.update(btnOnClick.getGraphics());
 		
@@ -98,8 +113,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			return;
 		}
 
-		try{
-			canClick = false;
+		try {
 			Thread.sleep(1000);
 			contClicks = 0;
 			if(currentPair.getPair() == btnOnClick) {
@@ -107,17 +121,17 @@ public class MainFrame extends JFrame implements ActionListener{
 				btnOnClick.setDisabledIcon(Rutinas.changeSize(btnOnClick.getFrontImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
 				currentPair.setEnabled(false);
 				currentPair.setDisabledIcon(Rutinas.changeSize(currentPair.getFrontImage(), currentPair.getWidth(), currentPair.getHeight()));
-				canClick = true;
 				contPairs++;
 				
-				if(contPairs == totalPairs) 
-					JOptionPane.showMessageDialog(this, "Juego Terminado");
+				if(contPairs == totalPairs) {
+					RestartMenu restart = new RestartMenu(this);
+					restart.start();
+				}
 					
 				return;
 			}
 			btnOnClick.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), btnOnClick.getWidth(), btnOnClick.getHeight()));
 			currentPair.setIcon(Rutinas.changeSize(btnOnClick.getBackImage(), currentPair.getWidth(), currentPair.getHeight()));
-			canClick = true;
 		} catch (Exception ex){
 
 		}
